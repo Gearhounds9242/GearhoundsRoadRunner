@@ -29,7 +29,6 @@ public class GearhoundsHardware extends Hardware {
     public DcMotorEx backLeft;
     public DcMotorEx frontRight;
     public DcMotorEx backRight;
-
     public static final int READ_PERIOD = 1;
     public IMU imu;
     public Orientation angles;
