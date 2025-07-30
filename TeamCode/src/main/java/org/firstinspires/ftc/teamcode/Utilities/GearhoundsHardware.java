@@ -68,9 +68,9 @@ public class GearhoundsHardware extends Hardware {
         backLeft = robotMap.get(DcMotorImplEx.class, "backLeft");
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight = robotMap.get(DcMotorEx.class, "frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight = robotMap.get(DcMotorEx.class, "backRight");
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");
@@ -78,8 +78,8 @@ public class GearhoundsHardware extends Hardware {
         // Defines the parameters for the gyro (units)
         IMU.Parameters imuParameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
                 )
         );
         imu.initialize(imuParameters);
@@ -105,5 +105,5 @@ public class GearhoundsHardware extends Hardware {
         lastAngles = angles;
         return globalAngle;
     }
-
+    public double clamp( double x, double min, double max) {return Math.max(min,Math.min(max,x));}
 }

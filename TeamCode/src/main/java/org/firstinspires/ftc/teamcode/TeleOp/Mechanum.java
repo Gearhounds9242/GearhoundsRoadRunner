@@ -49,11 +49,12 @@ import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
 /*
  * Demonstrates an empty iterative OpMode
  */
-@TeleOp(name = "Concept: NullOp", group = "Concept")
+@TeleOp(name = "Mecanum", group = "Concept")
 public class Mechanum extends OpMode {
 
     private GearhoundsHardware robot = new GearhoundsHardware();
     private ElapsedTime runtime = new ElapsedTime();
+    public static double shift;
 
     /**
      * This method will be called once, when the INIT button is pressed.
@@ -61,6 +62,8 @@ public class Mechanum extends OpMode {
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
+        robot.init(hardwareMap);
+        shift = 1;
     }
 
     /**
@@ -77,6 +80,7 @@ public class Mechanum extends OpMode {
      */
     @Override
     public void start() {
+
         runtime.reset();
     }
 
@@ -86,10 +90,22 @@ public class Mechanum extends OpMode {
      */
     @Override
     public void loop() {
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        double x = gamepad1.left_stick_x;
-        double rx = gamepad1.right_stick_x;
+
+        if (gamepad1.ps){
+            shift = 0.5;
+        }
+        if (gamepad1.share){
+            shift = 1;
+        }
+
+
+        double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double y = gamepad1.left_stick_y;
+        double x = -gamepad1.left_stick_x;
+        double rx = -gamepad1.right_stick_x;
+        if (gamepad1.options) {
+            robot.imu.resetYaw();
+        }
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
@@ -98,27 +114,24 @@ public class Mechanum extends OpMode {
             robot.imu.resetYaw();
         }
 
-        double botHeading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        // Rotate the movement direction counter to the bot's rotation
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
+        double rotX = x * Math.cos(-facing) - y * Math.sin(-facing);
+        rotX = rotX * 1.1;
+        double rotY = x * Math.sin(-facing) + y * Math.cos(-facing);
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        double d = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
 
-        robot.frontLeft.setPower(frontLeftPower);
-        robot.backLeft.setPower(backLeftPower);
-        robot.frontRight.setPower(frontRightPower);
-        robot.backRight.setPower(backRightPower);
+        double lf = (rotY + rotX + rx) / d;
+        double lb = (rotY - rotX + rx) / d;
+        double rf = (rotY - rotX - rx) / d;
+        double rb = (rotY + rotX - rx) / d;
+
+        //set rightFront negative so it goes same direction as other heels
+        robot.frontLeft.setVelocity(1500 * lf * shift);
+        robot.backLeft.setVelocity(1500 * lb * shift);
+        robot.frontRight.setVelocity(1500 * rf * shift);
+        robot.backRight.setVelocity(1500 * rb * shift);
     }
 
     /**
