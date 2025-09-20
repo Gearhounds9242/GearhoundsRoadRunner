@@ -26,6 +26,7 @@ public class GearhoundsHardware extends Hardware {
     public Servo ExampleServo;
     public HuskyLens huskyLens;
 */
+    public WebcamName webcamName;
 //Drivetrain Members
     public DcMotorEx frontLeft;
     public DcMotorEx backLeft;
@@ -51,8 +52,6 @@ public class GearhoundsHardware extends Hardware {
 
     }
 
-
-
     // Override to set actual robot configuration
     public void init(HardwareMap hwMap) {
 
@@ -65,6 +64,7 @@ public class GearhoundsHardware extends Hardware {
         ExampleMotor = robotMap.get(DcMotorEx.class, "ExampleMotor");
         NameInCodeHere = robotMap.get(DeviceTypeHere.class, "DriverStationNameHere");
     */
+        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
     //Drivetrain Members
 
         frontLeft = robotMap.get(DcMotorEx.class, "frontLeft");
