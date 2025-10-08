@@ -54,6 +54,9 @@ public class Mechanum extends OpMode {
 
     private GearhoundsHardware robot = new GearhoundsHardware();
     private ElapsedTime runtime = new ElapsedTime();
+    public static double Intake_Speed;
+    public static double Top_Speed;
+    public static double Bottom_Speed;
     public static double shift;
 
     /**
@@ -99,6 +102,34 @@ public class Mechanum extends OpMode {
         }
 
 
+        if (gamepad1.a){
+            robot.intake.setVelocity(-Intake_Speed);
+        }
+
+        if (gamepad1.dpad_up){
+            Intake_Speed = Intake_Speed + -1000;
+        }
+
+        if (gamepad1.dpad_down) {
+            Intake_Speed = Intake_Speed + 1000;
+        }
+
+        if (gamepad2.dpad_down) {
+            Top_Speed = Top_Speed + -1000;
+            Bottom_Speed = Bottom_Speed + -1000;
+        }
+
+        if (gamepad2.dpad_up){
+            Top_Speed = Top_Speed + 1000;
+            Bottom_Speed = Bottom_Speed + 1000;
+        }
+
+        if (gamepad2.ps){
+            robot.TopMotor.setVelocity(Top_Speed);
+            robot.BottomMotor.setVelocity(Bottom_Speed);
+        }
+
+
         double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         double y = gamepad1.left_stick_y;
         double x = -gamepad1.left_stick_x;
@@ -132,6 +163,12 @@ public class Mechanum extends OpMode {
         robot.backLeft.setVelocity(1500 * lb * shift);
         robot.frontRight.setVelocity(1500 * rf * shift);
         robot.backRight.setVelocity(1500 * rb * shift);
+        telemetry.addData("", "Intake Speed %f", Intake_Speed);
+        telemetry.addData("", "Outtake Top Speed %f", Top_Speed);
+        telemetry.addData("", "Outtake Bottom Speed %f", Bottom_Speed);
+
+
+
     }
 
     /**

@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+
 // Generic robot class
 public class GearhoundsHardware extends Hardware {
     public HardwareMap robotMap;
@@ -26,7 +27,13 @@ public class GearhoundsHardware extends Hardware {
     public Servo ExampleServo;
     public HuskyLens huskyLens;
 */
-    public WebcamName webcamName;
+//    public Servo Testservo;
+    public DcMotorEx intake;
+    public DcMotorEx TopMotor;
+    public DcMotorEx BottomMotor;
+
+//Comment back in when needed for vision
+//    public WebcamName webcamName;
 //Drivetrain Members
     public DcMotorEx frontLeft;
     public DcMotorEx backLeft;
@@ -64,8 +71,15 @@ public class GearhoundsHardware extends Hardware {
         ExampleMotor = robotMap.get(DcMotorEx.class, "ExampleMotor");
         NameInCodeHere = robotMap.get(DeviceTypeHere.class, "DriverStationNameHere");
     */
-        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+
+//Comment back in when needed for vision
+//        webcamName = robotMap.get(WebcamName.class, "Webcam 1");
     //Drivetrain Members
+
+//        Testservo = robotMap.get(Servo.class, "testservo");
+        intake = robotMap.get(DcMotorEx.class, "Intake");
+        TopMotor = robotMap.get(DcMotorEx.class, "topmotor");
+        BottomMotor = robotMap.get(DcMotorEx.class, "bottommotor");
 
         frontLeft = robotMap.get(DcMotorEx.class, "frontLeft");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -82,8 +96,8 @@ public class GearhoundsHardware extends Hardware {
         // Defines the parameters for the gyro (units)
         IMU.Parameters imuParameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
         imu.initialize(imuParameters);
