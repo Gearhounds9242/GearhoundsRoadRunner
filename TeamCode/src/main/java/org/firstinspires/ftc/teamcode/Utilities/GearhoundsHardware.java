@@ -77,9 +77,12 @@ public class GearhoundsHardware extends Hardware {
     //Drivetrain Members
 
 //        Testservo = robotMap.get(Servo.class, "testservo");
-        intake = robotMap.get(DcMotorEx.class, "Intake");
+
         TopMotor = robotMap.get(DcMotorEx.class, "topmotor");
+        TopMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         BottomMotor = robotMap.get(DcMotorEx.class, "bottommotor");
+        BottomMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         frontLeft = robotMap.get(DcMotorEx.class, "frontLeft");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
