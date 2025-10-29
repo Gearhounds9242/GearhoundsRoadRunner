@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -79,9 +80,9 @@ public class GearhoundsHardware extends Hardware {
 //        Testservo = robotMap.get(Servo.class, "testservo");
 
         TopMotor = robotMap.get(DcMotorEx.class, "topmotor");
-        TopMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        TopMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         BottomMotor = robotMap.get(DcMotorEx.class, "bottommotor");
-        BottomMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        BottomMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
         frontLeft = robotMap.get(DcMotorEx.class, "frontLeft");
@@ -92,6 +93,9 @@ public class GearhoundsHardware extends Hardware {
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight = robotMap.get(DcMotorEx.class, "backRight");
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        intake = robotMap.get(DcMotorEx.class, "intake");
+        intake.setDirection(DcMotorImplEx.Direction.FORWARD);
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");

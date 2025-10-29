@@ -45,6 +45,8 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
 import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
@@ -52,6 +54,7 @@ import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
 /*
  * Demonstrates an empty iterative OpMode
  */
+@Config
 @TeleOp(name = "Mechanum", group = "org/firstinspires/ftc/teamcode/TeleOp")
 public class Mechanum extends OpMode {
 
@@ -59,6 +62,9 @@ public class Mechanum extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private FtcDashboard dashboard;
     public static double Intake_Speed = 0;
+    // back power 1700 for both
+
+    //front power 1600 bottom 1480 top
     public static double Top_Speed = 2000;
     public static double Bottom_Speed = 2000;
     public static double shift = 1;
@@ -73,19 +79,6 @@ public class Mechanum extends OpMode {
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
 
-    }
-
-    /**
-     * This method will be called repeatedly during the period between when
-     * the INIT button is pressed and when the START button is pressed (or the
-     * OpMode is stopped).
-     */
-    @Override
-    public void init_loop() {
-        // Dashboard telemetry
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("Status", "Initialized");
-        dashboard.sendTelemetryPacket(packet);
     }
 
     /**
@@ -105,9 +98,14 @@ public class Mechanum extends OpMode {
 
         // Send data to Dashboard
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("TopMotor", ((robot.TopMotor.getVelocity() / 145.1) * 60));
+        packet.put("TopMotor", ((robot.TopMotor.getVelocity() / 28) * 60));
         packet.put("BottomMotor", ((robot.BottomMotor.getVelocity() / 28) * 60));
+        packet.put("TopVoltage", robot.TopMotor.getCurrent(CurrentUnit.AMPS));
+        packet.put("BottomVoltage", robot.BottomMotor.getCurrent(CurrentUnit.AMPS));
         dashboard.sendTelemetryPacket(packet);
+
+
+
 
         if (gamepad1.ps){
             shift = 0.5;
@@ -117,15 +115,26 @@ public class Mechanum extends OpMode {
         }
 
 
-
-        if(gamepad2.right_trigger > 0.1){
-            robot.TopMotor.setVelocity(Top_Speed * gamepad2.right_trigger);
-            robot.BottomMotor.setVelocity(Bottom_Speed * gamepad2.right_trigger);
+        if (gamepad1.right_trigger > 0.1){
+            robot.intake.setVelocity(Intake_Speed);
+        } else if (gamepad1.right_trigger <0.99) {
+            robot.intake.setVelocity(0);
         }
 
 
+        if(gamepad2.right_trigger > 0.1){
+            robot.BottomMotor.setVelocity(Bottom_Speed * gamepad2.right_trigger);
+        } else if (gamepad2.right_trigger < 0.99) {
+            robot.BottomMotor.setVelocity(0);
+        }
 
-        
+        if(gamepad2.left_trigger > 0.1){
+            robot.TopMotor.setVelocity(Top_Speed * gamepad2.left_trigger);
+        } else if (gamepad2.left_trigger < 0.99) {
+            robot.TopMotor.setVelocity(0);
+        }
+
+
         double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         double y = gamepad1.left_stick_y;
         double x = -gamepad1.left_stick_x;
@@ -167,13 +176,4 @@ public class Mechanum extends OpMode {
 
     }
 
-    /**
-     * This method will be called once, when this OpMode is stopped.
-     * <p>
-     * Your ability to control hardware from this method will be limited.
-     */
-    @Override
-    public void stop() {
-
-    }
 }
