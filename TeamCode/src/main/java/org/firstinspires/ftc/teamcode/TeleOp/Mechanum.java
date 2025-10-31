@@ -34,22 +34,17 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.sun.tools.javac.comp.Todo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+
 import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
-import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
+
 
 /*
  * Demonstrates an empty iterative OpMode
@@ -58,11 +53,11 @@ import org.firstinspires.ftc.teamcode.Utilities.GearhoundsHardware;
 @TeleOp(name = "Mechanum", group = "org/firstinspires/ftc/teamcode/TeleOp")
 public class Mechanum extends OpMode {
 
-    private GearhoundsHardware robot = new GearhoundsHardware();
-    private ElapsedTime runtime = new ElapsedTime();
+    private final GearhoundsHardware robot = new GearhoundsHardware();
+    private final ElapsedTime runtime = new ElapsedTime();
     private FtcDashboard dashboard;
     public static double Intake_Speed = 0;
-    // back power 1700 for both
+    // back power 1650 for both
 
     //front power 1600 bottom 1480 top
     public static double Top_Speed = 2000;
@@ -103,7 +98,6 @@ public class Mechanum extends OpMode {
         packet.put("TopVoltage", robot.TopMotor.getCurrent(CurrentUnit.AMPS));
         packet.put("BottomVoltage", robot.BottomMotor.getCurrent(CurrentUnit.AMPS));
         dashboard.sendTelemetryPacket(packet);
-
 
 
 
