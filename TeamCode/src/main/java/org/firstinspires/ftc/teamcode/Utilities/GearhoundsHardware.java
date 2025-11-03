@@ -28,7 +28,7 @@ public class GearhoundsHardware extends Hardware {
     public Servo ExampleServo;
     public HuskyLens huskyLens;
 */
-//    public Servo Testservo;
+    public Servo drop;
     public DcMotorEx intake;
     public DcMotorEx TopMotor;
     public DcMotorEx BottomMotor;
@@ -40,6 +40,11 @@ public class GearhoundsHardware extends Hardware {
     public DcMotorEx backLeft;
     public DcMotorEx frontRight;
     public DcMotorEx backRight;
+
+
+
+
+//    public DcMotorEx motor;
 
 
     public static final int READ_PERIOD = 1;
@@ -77,7 +82,11 @@ public class GearhoundsHardware extends Hardware {
 //        webcamName = robotMap.get(WebcamName.class, "Webcam 1");
     //Drivetrain Members
 
-//        Testservo = robotMap.get(Servo.class, "testservo");
+        drop = robotMap.get(Servo.class, "drop");
+
+//        motor = robotMap.get(DcMotorEx.class, "motor");
+//        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        motor
 
         TopMotor = robotMap.get(DcMotorEx.class, "topmotor");
         TopMotor.setDirection(DcMotorSimple.Direction.REVERSE);

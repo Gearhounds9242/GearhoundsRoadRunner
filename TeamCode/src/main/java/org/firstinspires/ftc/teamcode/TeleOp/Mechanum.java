@@ -37,7 +37,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.comp.Todo;
+import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -55,6 +55,9 @@ public class Mechanum extends OpMode {
 
     private final GearhoundsHardware robot = new GearhoundsHardware();
     private final ElapsedTime runtime = new ElapsedTime();
+
+    InterpLUT velocityTopLut = new InterpLUT();
+
     private FtcDashboard dashboard;
     public static double Intake_Speed = 0;
     // back power 1650 for both
@@ -63,6 +66,17 @@ public class Mechanum extends OpMode {
     public static double Top_Speed = 2000;
     public static double Bottom_Speed = 2000;
     public static double shift = 1;
+
+    public static double drop_up = 0.63;
+    public static double drop_down = 0.36;
+    public static double drop_high = 0.36;
+    public static double p2ytime = 0;
+    public static int ballNumber = 0;
+    public static double twoballtime1 = 0.1;
+    public static double twoballtime2 = 0.5;
+    public static double twoballtime3 = 1;
+    public static double oneballtime1 = 0.1;
+    public static double oneballtime2 = 0.5;
 
     /**
      * This method will be called once, when the INIT button is pressed.
@@ -73,6 +87,9 @@ public class Mechanum extends OpMode {
         dashboard.setTelemetryTransmissionInterval(25);
         telemetry.addData("Status", "Initialized");
         robot.init(hardwareMap);
+
+        velocityTopLut.add(12,1000);
+        velocityTopLut.add(24,2000);
 
     }
 
@@ -98,6 +115,11 @@ public class Mechanum extends OpMode {
         packet.put("TopVoltage", robot.TopMotor.getCurrent(CurrentUnit.AMPS));
         packet.put("BottomVoltage", robot.BottomMotor.getCurrent(CurrentUnit.AMPS));
         dashboard.sendTelemetryPacket(packet);
+
+
+
+
+
 
 
 
@@ -129,7 +151,39 @@ public class Mechanum extends OpMode {
         }
 
 
-        double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        if (gamepad2.y) {
+            p2ytime = runtime.seconds();
+        }
+
+        if (((runtime.seconds() - p2ytime) < twoballtime1) && ballNumber == 2) {
+            robot.drop.setPosition(0.30);
+        } else if (((runtime.seconds() - p2ytime) < twoballtime2) && ballNumber == 2) {
+            robot.drop.setPosition(0.69);
+        } else if (((runtime.seconds() - p2ytime) < twoballtime3) && ballNumber == 2) {
+            robot.drop.setPosition(0.63);
+            ballNumber -= 1;
+        }
+
+        if (((runtime.seconds() - p2ytime) < oneballtime1) && ballNumber <= 1) {
+            robot.drop.setPosition(0.30);
+        } else if (((runtime.seconds() - p2ytime) < oneballtime2) && ballNumber <= 1) {
+            robot.drop.setPosition(0.63);
+            ballNumber = 0;
+        }
+
+
+        if(gamepad2.dpad_down){
+            ballNumber -=1;
+        }
+
+        if(gamepad2.dpad_up){
+            ballNumber +=1;
+        }
+
+        if(gamepad2.dpad_right){
+            robot.drop.setPosition(drop_high);
+
+        }        double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         double y = gamepad1.left_stick_y;
         double x = -gamepad1.left_stick_x;
         double rx = -gamepad1.right_stick_x;
@@ -165,6 +219,7 @@ public class Mechanum extends OpMode {
         telemetry.addData("", "Intake Speed %f", Intake_Speed);
         telemetry.addData("", "Outtake Top Speed %f", Top_Speed);
         telemetry.addData("", "Outtake Bottom Speed %f", Bottom_Speed);
+        telemetry.addData("", "Ball number %d", ballNumber);
 
 
 
